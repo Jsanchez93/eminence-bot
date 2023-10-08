@@ -1,65 +1,41 @@
-import mongoose from 'mongoose'
-import { ChannelType, Message } from 'discord.js'
+import { EmbedBuilder, Message } from 'discord.js'
 
 import { BotEvent } from '../types'
-import { checkPermissions, getGuildOption, sendTimedMessage } from '../functions'
+
+let lastMessage: Message
 
 const event: BotEvent = {
   name: 'messageCreate',
   once: false,
   execute: async (message: Message) => {
-    console.log(message);
-    
+    if (message.author.bot) return
     if (!message.member || message.member.user.bot) return
     if (!message.guild) return
+        
+    // #general
+    const channelId = process.env.CHANNEL_ID
+    if (message.channelId !== channelId) return
 
-    let prefix = process.env.PREFIX
-    if (mongoose.connection.readyState === 1) {
-      let guildPrefix = await getGuildOption(message.guild, 'prefix') 
-      if (guildPrefix) prefix = guildPrefix
-    }
+    lastMessage?.delete().catch(console.error)
 
-    if (!message.content.startsWith(prefix)) return
-    if (message.channel.type !== ChannelType.GuildText) return
+    const year = new Date().getFullYear()
+    const month = new Date().toLocaleString('en-US', { month: 'long' });
 
-    const args = message.content.substring(prefix.length).split(' ')
-    let command = message.client.commands.get(args[0])
-
-    if (!command) {
-      const commandFromAlias = message.client.commands.find((command) => command.aliases.includes(args[0]))
-      if (commandFromAlias) command = commandFromAlias
-      else return
-    }
-
-    const cooldown = message.client.cooldowns.get(`${command.name}-${message.member.user.username}`)
-    const neededPermissions = checkPermissions(message.member, command.permissions)
-    if (neededPermissions !== null)
-      return sendTimedMessage(
-        `You don't have enough permissions to use this command.\nNeeded permissions: ${neededPermissions.join(', ')}`,
-        message.channel,
-        5000
-      )
-
-
-    if (command.cooldown && cooldown) {
-      if (Date.now() < cooldown) {
-        sendTimedMessage(
-          `You have to wait ${Math.floor(Math.abs(Date.now() - cooldown) / 1000)} second(s) to use this command again.`,
-          message.channel,
-          5000
-        )
-        return
-      }
-      message.client.cooldowns.set(`${command.name}-${message.member.user.username}`, Date.now() + command.cooldown * 1000)
-
-      setTimeout(() => {
-        message.client.cooldowns.delete(`${command?.name}-${message.member?.user.username}`)
-      }, command.cooldown * 1000)
-    } else if (command.cooldown && !cooldown) {
-      message.client.cooldowns.set(`${command.name}-${message.member.user.username}`, Date.now() + command.cooldown * 1000)
-    }
-
-    command.execute(message, args)
+    const dmLogEmbed = new EmbedBuilder()
+      .setColor('Blue')
+      .setTitle(`How can I get verified? (New verification ${month} ${year})`)
+      .setDescription(`
+        ✅ Send a screenshot of your main character.
+        📝 If you have alternate characters, specify their nicknames.
+        💌 If you are a guest, please notify an admin.
+        
+        ⚠️ Remember that it must be a good quality screenshot, where you can see all the information about your character (nickname, guild, level, CP, etc)
+        ⛔ The screenshot must be taken from your computer, not from a phone.
+      `)
+      .setTimestamp()
+      .setFooter({ text: '🕓 Please wait patiently for server access.' })
+    
+    lastMessage = await message.channel.send({ embeds: [dmLogEmbed] })
   }
 }
 

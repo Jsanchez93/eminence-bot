@@ -7,9 +7,9 @@ import { Command, SlashCommand } from './types'
 
 config()
 
-const { Guilds, GuildMessages, DirectMessages } = GatewayIntentBits
+const { Guilds, GuildMessages, DirectMessages, MessageContent } = GatewayIntentBits
 const client = new Client({
-  intents:[Guilds, GuildMessages, DirectMessages]
+  intents:[Guilds, GuildMessages, DirectMessages, MessageContent]
 })
 
 client.slashCommands = new Collection<string, SlashCommand>()
