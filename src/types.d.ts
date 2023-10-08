@@ -51,6 +51,7 @@ declare global {
 			MONGO_URI: string,
 			MONGO_DATABASE_NAME: string
 			CHANNEL_ID: string
+			ROLE_ID: string
 		}
 	}
 }
