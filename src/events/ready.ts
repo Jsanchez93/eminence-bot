@@ -10,7 +10,7 @@ const dailyMessage = (client: Client) => {
   if (!channelId || !roleId) return
 
   // daily at 4:00 PM -> 0 16 * * 1-7
-  const cron = new CronJob('*/5 * * * * *', () => {
+  const cron = new CronJob('0 16 * * 1-7', () => {
     const channel = client.channels.cache.get(channelId)
     if (!channel) return
     const textChannel = channel as TextChannel
