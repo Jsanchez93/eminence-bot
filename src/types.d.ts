@@ -50,8 +50,10 @@ declare global {
 			PREFIX: string,
 			MONGO_URI: string,
 			MONGO_DATABASE_NAME: string
-			CHANNEL_ID: string
+			CHANNEL_ID_STICKY: string
+			CHANNEL_ID_DAILY: string
 			ROLE_ID: string
+			CRON_CONFIG: string
 		}
 	}
 }

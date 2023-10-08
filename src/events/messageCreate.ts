@@ -13,7 +13,7 @@ const event: BotEvent = {
     if (!message.guild) return
         
     // #general
-    const channelId = process.env.CHANNEL_ID
+    const channelId = process.env.CHANNEL_ID_STICKY
     if (message.channelId !== channelId) return
 
     lastMessage?.delete().catch(console.error)

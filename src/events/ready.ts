@@ -5,12 +5,12 @@ import { BotEvent } from '../types'
 import { color } from '../functions'
 
 const dailyMessage = (client: Client) => {
-  const channelId = process.env.CHANNEL_ID
+  const channelId = process.env.CHANNEL_ID_DAILY
   const roleId = process.env.ROLE_ID
-  if (!channelId || !roleId) return
+  const cronConfig = process.env.CRON_CONFIG
+  if (!channelId || !roleId || !cronConfig) return
 
-  // daily at 4:00 PM -> 0 16 * * 1-7
-  const cron = new CronJob('0 16 * * 1-7', () => {
+  const cron = new CronJob(cronConfig, () => {
     const channel = client.channels.cache.get(channelId)
     if (!channel) return
     const textChannel = channel as TextChannel
