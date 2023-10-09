@@ -115,7 +115,7 @@ const command: SlashCommand = {
         .setThumbnail(thumbnail?.url ?? null)
         .setImage(image?.url ?? null)
         .setTimestamp()
-        .setFooter({ text: options.footer ? options.footer.toString() : '', iconURL: interaction.client.user?.avatarURL() ?? undefined })
+        .setFooter({ text: options.footer ? options.footer.toString() : ' ', iconURL: interaction.client.user?.avatarURL() ?? undefined })
       const selectedTextChannel = interaction.channel?.client.channels.cache.get(options.channel.toString()) as TextChannel
       await selectedTextChannel.send({ embeds: [embed] })
       return interaction.editReply({ content: 'Embed message successfully sent.' })
