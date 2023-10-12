@@ -54,6 +54,7 @@ declare global {
 			CHANNEL_ID_DAILY: string
 			ROLE_ID: string
 			CRON_CONFIG: string
+			CRON_CONFIG_WEEKLY: string
 		}
 	}
 }
