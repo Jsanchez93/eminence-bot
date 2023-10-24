@@ -26,7 +26,7 @@ const dailyMessage = (client: Client) => {
     if (!channel) return
     const textChannel = channel as TextChannel
     textChannel.send({
-      content: `<@&${roleId}>`,
+      content: '',
       files: ['./assets/weekly.png'],
     })
   })
